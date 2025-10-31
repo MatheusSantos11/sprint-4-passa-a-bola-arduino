@@ -26,7 +26,7 @@ O sistema demonstra como a Edge Computing permite processar dados localmente e d
 1. ESP32 conecta-se à rede WiFi e ao broker MQTT público (`broker.hivemq.com`)  
 2. Medição do sensor ultrassônico e simulação de velocidade  
 3. Payload JSON enviado via MQTT:
-```json
+json
   {"passes": <número>, "velocidade": <valor>}
   Node‑RED recebe o MQTT, converte JSON, envia HTTP POST ao Flask e atualiza dashboard
   
