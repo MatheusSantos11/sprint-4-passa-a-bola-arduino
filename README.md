@@ -1,6 +1,9 @@
-#⚽ Passa a Bola – Sistema IoT com ESP32, Node-RED e Flask
+# ⚽ Passa a Bola – Sistema IoT com ESP32, Node-RED e Flask
 
-![IoT](https://img.shields.io/badge/IoT-ESP32-blue) ![MQTT](https://img.shields.io/badge/MQTT-PubSubClient-green) ![Flask](https://img.shields.io/badge/Flask-Python-orange) ![Node-RED](https://img.shields.io/badge/Node--RED-Dashboard-red)
+![IoT](https://img.shields.io/badge/IoT-ESP32-blue)
+![MQTT](https://img.shields.io/badge/MQTT-PubSubClient-green)
+![Flask](https://img.shields.io/badge/Flask-Python-orange)
+![Node-RED](https://img.shields.io/badge/Node--RED-Dashboard-red)
 
 ---
 
@@ -9,7 +12,7 @@
 Este projeto implementa um **sistema de monitoramento em tempo real de passes e velocidade de um objeto**, utilizando:
 
 * **ESP32** (simulado ou físico) como nó de borda (**Edge Computing**)
-* **Node‑RED** para orquestração MQTT, processamento e dashboard
+* **Node-RED** para orquestração MQTT, processamento e dashboard
 * **Flask** para armazenamento simples em arquivo JSON
 * **Dashboard Web** para visualização ao vivo
 
@@ -19,55 +22,62 @@ O objetivo é demonstrar **processamento local de dados** e visualização quase
 
 ## 2️⃣ Funcionalidades
 
-* 📡 **Detecção de passes** via sensor ultrassônico
-* ⚡ **Simulação de velocidade** em m/s
-* 📨 **Publicação via MQTT** (`passa-a-bola/dados`)
-* 📊 **Node‑RED**: recebe MQTT, envia ao Flask e atualiza dashboard
-
-  * Gauge de velocidade
-  * Contador de passes acumulados
-* 💾 **Persistência em `dados.json`** para consultas futuras
+* 📡 **Detecção de passes** via sensor ultrassônico  
+* ⚡ **Simulação de velocidade** em m/s  
+* 📨 **Publicação via MQTT** (`passa-a-bola/dados`)  
+* 📊 **Node-RED**: recebe MQTT, envia ao Flask e atualiza dashboard  
+  - Gauge de velocidade  
+  - Contador de passes acumulados  
+* 💾 **Persistência em `dados.json`** para consultas futuras  
 
 ---
 
 ## 3️⃣ Arquitetura e Fluxo de Dados
 
-1. ESP32 conecta-se à rede WiFi e ao broker MQTT público (`broker.hivemq.com`)
-2. Medição do sensor ultrassônico e simulação de velocidade
+1. ESP32 conecta-se à rede WiFi e ao broker MQTT público (`broker.hivemq.com`)  
+2. Medição do sensor ultrassônico e simulação de velocidade  
 3. Payload JSON enviado via MQTT:
 
 ```json
 {"passes": <número>, "velocidade": <valor>}
 ```
 
-4. Node‑RED:
+4. Node-RED:  
+   * Converte JSON  
+   * Envia HTTP POST ao Flask  
+   * Atualiza dashboard  
 
-   * Converte JSON
-   * Envia HTTP POST ao Flask
-   * Atualiza dashboard
+5. Flask grava os dados no arquivo `dados.json` com timestamp  
+6. Dashboard acessível em [http://127.0.0.1:1880/ui](http://127.0.0.1:1880/ui)
 
-5. Flask grava os dados no arquivo `dados.json` com timestamp
+---
 
-6. Dashboard: [http://127.0.0.1:1880/ui](http://127.0.0.1:1880/ui)
+### 3.1 🧩 Diagrama e Prints da Arquitetura
 
-### 3.1 Arquitetura Diagrama
+#### 🔹 Arquitetura Geral
+![Arquitetura](imgs/wokwi%201.PNG)
 
-> **Coloque aqui o print ou diagrama de arquitetura do projeto**
-> `![Arquitetura](caminho/para/foto_arquitetura.png)`
+#### 🔹 Simulação Wokwi
+| Etapa | Imagem |
+|-------|--------|
+| Conexão dos sensores | ![Wokwi 1](imgs/wokwi%201.PNG) |
+| Publicação MQTT | ![Wokwi 2](imgs/wokwi%202.PNG) |
+| Comunicação Node-RED | ![Wokwi 3](imgs/wokwi%203.PNG) |
+| Teste final | ![Wokwi 4](imgs/wokwi%204.PNG) |
 
 ---
 
 ## 4️⃣ Requisitos
 
-* **Software:** Python, Flask, Node.js, Node-RED, node-red-dashboard
-* **Biblioteca MQTT** para ESP32 (`PubSubClient`)
+* **Software:** Python, Flask, Node.js, Node-RED, node-red-dashboard  
+* **Biblioteca MQTT** para ESP32 (`PubSubClient`)  
 * **Hardware:** ESP32 + sensor ultrassônico HC-SR04 (ou simulação via Wokwi)
 
 ---
 
 ## 5️⃣ Código do Projeto
 
-### Flask (`app.py`)
+### 🐍 Flask (`app.py`)
 
 ```python
 from flask import Flask, request, jsonify
@@ -101,7 +111,13 @@ if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
 ```
 
-### ESP32 (`esp32.ino`)
+#### 🔸 Execução Flask
+![Flask Execução](imgs/py%201.PNG)
+![Flask Recebendo Dados](imgs/py%202.PNG)
+
+---
+
+### ⚙️ ESP32 (`esp32.ino`)
 
 ```cpp
 #include <WiFi.h>
@@ -172,18 +188,20 @@ void loop() {
 }
 ```
 
-### Node-RED
+---
 
-> Importar JSON do fluxo disponível em `node-red-flow.json`
+### 🧠 Node-RED
+
+> Importar o fluxo `fluxo_passa_a_bola.json`
 
 * Recebe MQTT → Converte JSON → POST Flask → Atualiza dashboard
-* Gauge de velocidade e texto com contagem de passes
+* Exibe gauge de velocidade e contador de passes
 
-### 5.1 Prints do Node-RED
+#### 🔸 Fluxo Node-RED
+![Fluxo Node-RED](imgs/node%20red%201.PNG)
 
-> **Coloque aqui os prints do fluxo Node-RED e do dashboard**
-> `![Node-RED Fluxo](caminho/para/foto_fluxo.png)`
-> `![Dashboard](caminho/para/foto_dashboard.png)`
+#### 🔸 Dashboard Node-RED
+![Dashboard Node-RED](imgs/node%20red%202.PNG)
 
 ---
 
@@ -191,6 +209,16 @@ void loop() {
 
 ```
 sprint-4/
+│
+├─ imgs/
+│  ├─ node red 1.PNG
+│  ├─ node red 2.PNG
+│  ├─ py 1.PNG
+│  ├─ py 2.PNG
+│  ├─ wokwi 1.PNG
+│  ├─ wokwi 2.PNG
+│  ├─ wokwi 3.PNG
+│  └─ wokwi 4.PNG
 │
 ├─ app.py
 ├─ dados.json
@@ -203,38 +231,29 @@ sprint-4/
 
 ## 7️⃣ Como Executar
 
-### Flask
-
+### 🐍 Flask
 ```bash
 py app.py
 ```
 
-### Node-RED
+### 🧱 Node-RED
+1. Abrir Node-RED → Menu → Import → JSON do fluxo  
+2. Configurar broker MQTT (`broker.hivemq.com`)  
+3. Deploy  
+4. Acesse o dashboard: [http://127.0.0.1:1880/ui](http://127.0.0.1:1880/ui)
 
-1. Abrir Node-RED → Menu → Import → JSON do fluxo
-2. Configurar broker MQTT (`broker.hivemq.com`)
-3. Deploy
-4. Dashboard: [http://127.0.0.1:1880/ui](http://127.0.0.1:1880/ui)
-
-### ESP32
-
-1. Configurar WiFi e broker MQTT
-2. Subir código
+### ⚙️ ESP32
+1. Configurar WiFi e broker MQTT  
+2. Subir código no Wokwi ou placa física  
 3. Monitor Serial mostra envios MQTT
-
-> **Coloque print do Serial Monitor do ESP32 aqui**
-> `![ESP32 Serial](caminho/para/foto_serial.png)`
 
 ---
 
 ## 8️⃣ Teste e Validação
 
-* Flask Console: verifica recebimento de dados (📩 Recebido: {...})
-* Node-RED Debug: mostra payload do MQTT e retorno do Flask
-* Dashboard: gauge de velocidade e contador de passes atualizando em tempo real
-
-> **Print do Flask Console opcional:**
-> `![Flask Console](caminho/para/foto_flask.png)`
+* Flask Console: confirma recebimento dos dados  
+* Node-RED Debug: mostra payload MQTT e retorno HTTP  
+* Dashboard: atualiza em tempo real
 
 ---
 
@@ -251,8 +270,8 @@ py app.py
 
 ## 🔟 Observações
 
-* Contagem de passes real, velocidade simulada
-* Processamento local (**Edge Computing**)
-* Persistência em arquivo JSON (em produção, recomendado **banco de dados**)
+* Contagem de passes real e velocidade simulada  
+* Processamento local (**Edge Computing**)  
+* Persistência em arquivo JSON (substituível por banco de dados)
 
-
+---
