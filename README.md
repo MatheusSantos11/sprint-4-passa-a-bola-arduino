@@ -1,4 +1,4 @@
-# ⚽ Passa a Bola – Sistema IoT com ESP32, Node-RED e Flask
+# 🏀 Passa a Bola – Sistema IoT com ESP32, Node-RED e Flask
 
 ![IoT](https://img.shields.io/badge/IoT-ESP32-blue) ![MQTT](https://img.shields.io/badge/MQTT-PubSubClient-green) ![Flask](https://img.shields.io/badge/Flask-Python-orange) ![Node-RED](https://img.shields.io/badge/Node--RED-Dashboard-red)
 
@@ -49,6 +49,11 @@ O objetivo é demonstrar **processamento local de dados** e visualização quase
 5. Flask grava os dados no arquivo `dados.json` com timestamp
 
 6. Dashboard: [http://127.0.0.1:1880/ui](http://127.0.0.1:1880/ui)
+
+### 3.1 Arquitetura Diagrama
+
+> **Coloque aqui o print ou diagrama de arquitetura do projeto**
+> `![Arquitetura](caminho/para/foto_arquitetura.png)`
 
 ---
 
@@ -174,6 +179,12 @@ void loop() {
 * Recebe MQTT → Converte JSON → POST Flask → Atualiza dashboard
 * Gauge de velocidade e texto com contagem de passes
 
+### 5.1 Prints do Node-RED
+
+> **Coloque aqui os prints do fluxo Node-RED e do dashboard**
+> `![Node-RED Fluxo](caminho/para/foto_fluxo.png)`
+> `![Dashboard](caminho/para/foto_dashboard.png)`
+
 ---
 
 ## 6️⃣ Estrutura de Arquivos
@@ -211,6 +222,9 @@ py app.py
 2. Subir código
 3. Monitor Serial mostra envios MQTT
 
+> **Coloque print do Serial Monitor do ESP32 aqui**
+> `![ESP32 Serial](caminho/para/foto_serial.png)`
+
 ---
 
 ## 8️⃣ Teste e Validação
@@ -218,6 +232,9 @@ py app.py
 * Flask Console: verifica recebimento de dados (📩 Recebido: {...})
 * Node-RED Debug: mostra payload do MQTT e retorno do Flask
 * Dashboard: gauge de velocidade e contador de passes atualizando em tempo real
+
+> **Print do Flask Console opcional:**
+> `![Flask Console](caminho/para/foto_flask.png)`
 
 ---
 
@@ -236,4 +253,4 @@ py app.py
 
 * Contagem de passes real, velocidade simulada
 * Processamento local (**Edge Computing**)
-* Persistência em arquivo JSON (em p
+* Persistência em arquivo JSON (em produção, recomendado **banco de dados**)
