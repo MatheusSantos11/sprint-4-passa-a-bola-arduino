@@ -34,15 +34,15 @@ json
   
   Dashboard (http://127.0.0.1:1880/ui) exibe velocidade e contagem de passes em tempo real
 
-4. Requisitos
+#4. Requisitos
 Python
 Flask
 Node.js + Node-RED + node-red-dashboard
 Biblioteca MQTT para ESP32 (PubSubClient)
 Hardware: ESP32 + sensor ultrassônico HC-SR04 (ou simulação via Wokwi)
 
-5. Código do Projeto
-5.1 Flask (app.py)
+#5. Código do Projeto
+##5.1 Flask (app.py)
   
   from flask import Flask, request, jsonify
   import json, os
@@ -75,7 +75,7 @@ Hardware: ESP32 + sensor ultrassônico HC-SR04 (ou simulação via Wokwi)
   
   if __name__ == "__main__":
       app.run(host="0.0.0.0", port=5000)
-5.2 ESP32 (esp32.ino)
+##5.2 ESP32 (esp32.ino)
 
   #include <WiFi.h>
   #include <PubSubClient.h>
@@ -145,7 +145,7 @@ Hardware: ESP32 + sensor ultrassônico HC-SR04 (ou simulação via Wokwi)
     Serial.println("📤 Enviado MQTT: " + payload);
     delay(5000);
   }
-5.3 Node-RED
+##5.3 Node-RED
   
   [
       {
@@ -292,7 +292,7 @@ Hardware: ESP32 + sensor ultrassônico HC-SR04 (ou simulação via Wokwi)
   ]
   
   
-6. Estrutura de Arquivos
+#6. Estrutura de Arquivos
 sprint-4/
 │
 ├─ app.py
@@ -301,12 +301,12 @@ sprint-4/
 ├─ esp32.ino
 ├─ README.md
 
-7. Como Executar
-7.1 Flask
+#7. Como Executar
+##7.1 Flask
 bash
 Copiar código
 py app.py
-7.2 Node-RED
+##7.2 Node-RED
 Abra Node-RED → Menu → Import → JSON do fluxo
 
 Configure broker MQTT → broker.hivemq.com
@@ -315,27 +315,27 @@ Deploy
 
 Dashboard: http://127.0.0.1:1880/ui
 
-7.3 ESP32
+##7.3 ESP32
 Configure WiFi e broker MQTT
 
 Suba o código
 
 Serial Monitor mostra envios MQTT
 
-8. Teste e Validação
+#8. Teste e Validação
 Flask console: verifica recebimento (📩 Recebido: {...})
 
 Node-RED debug: mostra payload do MQTT e retorno do Flask
 
 Dashboard: gauge de velocidade e contador de passes atualizando em tempo real
 
-9. Participantes
+#9. Participantes
 Henrique Kolomyes Silveira | RM563467
 
 Matheus Santos de Oliveira | RM561982
 
 
-10. Observações
+#10. Observações
 Contagem de passes real, velocidade simulada
 
 Processamento local (Edge Computing)
