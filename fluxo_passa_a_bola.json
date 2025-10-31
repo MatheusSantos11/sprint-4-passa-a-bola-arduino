@@ -1,0 +1,143 @@
+[
+    {
+        "id": "passaabola_flow",
+        "type": "tab",
+        "label": "Passa a Bola Dashboard",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "mqtt_in",
+        "type": "mqtt in",
+        "z": "passaabola_flow",
+        "name": "Receber do ESP32",
+        "topic": "passa-a-bola/dados",
+        "qos": "0",
+        "datatype": "auto",
+        "broker": "mqtt_broker",
+        "x": 160,
+        "y": 100,
+        "wires": [["debug_mqtt","json_parse"]]
+    },
+    {
+        "id": "json_parse",
+        "type": "json",
+        "z": "passaabola_flow",
+        "name": "Converter JSON",
+        "property": "payload",
+        "action": "obj",
+        "x": 380,
+        "y": 100,
+        "wires": [["http_post","function_dashboard"]]
+    },
+    {
+        "id": "http_post",
+        "type": "http request",
+        "z": "passaabola_flow",
+        "name": "Enviar ao Flask",
+        "method": "POST",
+        "ret": "txt",
+        "url": "http://127.0.0.1:5000/dados",
+        "x": 610,
+        "y": 60,
+        "wires": [["debug_flask"]]
+    },
+    {
+        "id": "function_dashboard",
+        "type": "function",
+        "z": "passaabola_flow",
+        "name": "Preparar para Dashboard",
+        "func": "msg.payload = {\n    velocidade: msg.payload.velocidade,\n    passes: msg.payload.passes\n};\nreturn msg;",
+        "outputs": 1,
+        "x": 610,
+        "y": 140,
+        "wires": [["gauge_velocidade","text_passes"]]
+    },
+    {
+        "id": "gauge_velocidade",
+        "type": "ui_gauge",
+        "z": "passaabola_flow",
+        "name": "Velocidade (m/s)",
+        "group": "ui_group",
+        "order": 1,
+        "width": 6,
+        "height": 4,
+        "gtype": "gage",
+        "title": "Velocidade (m/s)",
+        "label": "m/s",
+        "format": "{{msg.payload.velocidade}}",
+        "min": 0,
+        "max": 15,
+        "colors": ["#00b500","#e6e600","#ca3838"],
+        "seg1": 5,
+        "seg2": 10,
+        "x": 880,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "text_passes",
+        "type": "ui_text",
+        "z": "passaabola_flow",
+        "group": "ui_group",
+        "order": 2,
+        "width": 6,
+        "height": 1,
+        "name": "Qtd de Passes",
+        "label": "Passes:",
+        "format": "{{msg.payload.passes}}",
+        "layout": "row-spread",
+        "x": 880,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "debug_mqtt",
+        "type": "debug",
+        "z": "passaabola_flow",
+        "name": "📥 Recebido MQTT",
+        "active": true,
+        "tosidebar": true,
+        "complete": "payload",
+        "x": 410,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "debug_flask",
+        "type": "debug",
+        "z": "passaabola_flow",
+        "name": "📤 Retorno Flask",
+        "active": true,
+        "tosidebar": true,
+        "complete": "payload",
+        "x": 830,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "mqtt_broker",
+        "type": "mqtt-broker",
+        "name": "HiveMQ Público",
+        "broker": "broker.hivemq.com",
+        "port": "1883",
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true
+    },
+    {
+        "id": "ui_group",
+        "type": "ui_group",
+        "name": "Painel Passa a Bola",
+        "tab": "ui_tab",
+        "order": 1,
+        "width": 6,
+        "collapse": false
+    },
+    {
+        "id": "ui_tab",
+        "type": "ui_tab",
+        "name": "Dashboard Passa a Bola",
+        "icon": "dashboard"
+    }
+]
